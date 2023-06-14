@@ -18,3 +18,4 @@ const sayHello = (x) => {
 }
 sayHello({ ...obj });
 console.log(obj);
+console.log('Đây là bài tập buổi 1');
