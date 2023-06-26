@@ -1,8 +1,8 @@
 const ItemFriendPhone = (props) => {
     return (
         <li>
-            <span>{props['children']}</span>
-            <span>082-231-566</span>
+            <span>{props.userName}</span>
+            <span>{props.numberPhone}</span>
         </li>
     )
 }

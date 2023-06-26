@@ -66,7 +66,6 @@ const viewPhoneBook = (listView) => {
 viewPhoneBook(phoneBook);
 
 const deleteSamePhone = (listFriendPhone) => {
-    for (let k = 0; k < listFriendPhone.length; k++) {
         for (let i = 0; i < listFriendPhone.length - 1; i++) {
             for (let j = i + 1; j < listFriendPhone.length; j++) {
                 if (listFriendPhone[j].phoneNumber === listFriendPhone[i].phoneNumber) {
@@ -75,7 +74,6 @@ const deleteSamePhone = (listFriendPhone) => {
                 }
             }
         }
-    }
     localStorage.setItem('phoneBook', JSON.stringify(listFriendPhone));
     viewPhoneBook(listFriendPhone);
 }
