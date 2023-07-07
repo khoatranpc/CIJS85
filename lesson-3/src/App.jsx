@@ -1,7 +1,6 @@
 import ItemFriendPhone from './components/ItemFriendPhone';
 import './App.css';
-import { useState } from 'react';
-import { ReactComponent as IconUser } from './assets/icon-user.svg';
+import { useEffect, useState } from 'react';
 import { uuid } from './utils';
 // state -> la 1 du lieu can duoc quan tam tron 1 component,
 // khi state thay doi -> cap nhat lai giao dien
@@ -38,17 +37,10 @@ function App() {
     localStorage.setItem('phoneBook', JSON.stringify(data));
   }
 
-  const [listFriendPhone, setListFriendPhone] = useState(() => {
-    const store = JSON.parse(localStorage.getItem('phoneBook'));
-    if (store) {
-      return store;
-    } else {
-      return [];
-    }
-  });
+  const [listFriendPhone, setListFriendPhone] = useState(null);
   const [listFilter, setListFilter] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-
+  const [loading, setLoading] = useState(true);
   const handleChange = (e) => {
     setSearchValue(e.target.value);
     // filter theo ten hoac sdt
@@ -95,6 +87,34 @@ function App() {
     }
     updateLocalStorage(listFriendPhone);
   }
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    // viết logic kiểm tra localStorage với data:
+    // nếu như có data -> setData bởi localStorage, nếu có rồi, -> setLoading => false
+    if (!listFriendPhone) {
+      // setListFriendPhone(JSON.parse(localStorage.getItem('phoneBook')));
+      fetch('https://64a2de9db45881cc0ae5d3ce.mockapi.io/api/v1/listFriendPhone').then((rs) => {
+        return rs.json();
+      }).then((data) => {
+        if (data) {
+          setListFriendPhone(data)
+        }
+      });
+    } else {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, [listFriendPhone]);
+  useEffect(() => {
+    const idInterval = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => {
+      clearInterval(idInterval);
+      console.log('cleanup');
+    }
+  }, [count]);
   return (
     // fragment
     // khoá 1: rule đặt biến != từ khoá của js
@@ -115,8 +135,8 @@ function App() {
      * -> các method trong js đều có kết quả trả về -> kết quả này là gì, từ đầu có kết quả này
      */
     <div className="app-container">
-      <h1>Số điện thoại bạn bè</h1>
-      <IconUser />
+      <h1>Số điện thoại bạn bè {count}</h1>
+      {/* <IconUser /> */}
       <form className='form-add' onSubmit={handleSubmit}>
         <input type="text" placeholder='Tên' name='userName' />
         <input type="text" placeholder='Điện thoại' name='numberPhone' />
@@ -132,7 +152,7 @@ function App() {
         }}>Xoá trùng</button>
       </div>
       <ul className="list-friend-phone">
-        {
+        {loading ? (<div>Loading...</div>) : (
           searchValue ? (
             listFilter.length === 0 ?
               <p>Không tìm thấy</p> :
@@ -142,7 +162,7 @@ function App() {
           ) : (listFriendPhone.map((item) => {
             return <ItemFriendPhone key={uuid()} userName={item.userName} numberPhone={item.numberPhone} />
           }))
-        }
+        )}
       </ul>
     </div>
   )
