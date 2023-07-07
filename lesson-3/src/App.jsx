@@ -1,7 +1,9 @@
 import ItemFriendPhone from './components/ItemFriendPhone';
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { uuid } from './utils';
+import StoreContext from './contexts/initContext';
+import baseDictionary, { LANG } from './contexts/dictionary';
 // state -> la 1 du lieu can duoc quan tam tron 1 component,
 // khi state thay doi -> cap nhat lai giao dien
 
@@ -106,15 +108,20 @@ function App() {
       }, 2000);
     }
   }, [listFriendPhone]);
+  // useEffect(() => {
+  //   const idInterval = setInterval(() => {
+  //     setCount(count + 1);
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(idInterval);
+  //   }
+  // }, [count]);
+
+
+  const store = useContext(StoreContext);
   useEffect(() => {
-    const idInterval = setInterval(() => {
-      setCount(count + 1);
-    }, 1000);
-    return () => {
-      clearInterval(idInterval);
-      console.log('cleanup');
-    }
-  }, [count]);
+    console.log(store.commonState.lang);
+  }, [store])
   return (
     // fragment
     // khoá 1: rule đặt biến != từ khoá của js
@@ -134,14 +141,30 @@ function App() {
      * vitejs -> nên config như vậy
      * -> các method trong js đều có kết quả trả về -> kết quả này là gì, từ đầu có kết quả này
      */
-    <div className="app-container">
-      <h1>Số điện thoại bạn bè {count}</h1>
+    <div className={`app-container ${store.commonState.theme}`}>
+      <h1>{baseDictionary[store.commonState.lang]['K_2']} {count}</h1>
       {/* <IconUser /> */}
       <form className='form-add' onSubmit={handleSubmit}>
-        <input type="text" placeholder='Tên' name='userName' />
-        <input type="text" placeholder='Điện thoại' name='numberPhone' />
-        <button type='submit'>Thêm</button>
+        <input type="text" placeholder={baseDictionary[store.commonState.lang]['K_3']} name='userName' />
+        <input type="text" placeholder={baseDictionary[store.commonState.lang]['K_4']} name='numberPhone' />
+        <button type='submit'>{baseDictionary[store.commonState.lang]['K_5']}</button>
       </form>
+      <button type='submit' onClick={() => {
+        if (store.commonState.theme === 'LIGHT') {
+          store.setCommonState('theme', 'DARK');
+        } else {
+          store.setCommonState('theme', 'LIGHT');
+        }
+      }}>Switch theme</button>
+      <button onClick={() => {
+        if (store.commonState.lang === LANG['VI']) {
+          store.setCommonState('lang', LANG['EN']);
+        } else {
+          store.setCommonState('lang', LANG['VI']);
+        }
+      }}>
+        Đổi ngôn ngữ
+      </button>
       <hr />
       <div className="feat-client">
         <input type="text" placeholder='Tìm kiếm' value={searchValue} onChange={handleChange} />

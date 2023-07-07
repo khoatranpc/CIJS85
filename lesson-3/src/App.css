@@ -55,4 +55,6 @@ div.app-container ul.list-friend-phone li {
   border-radius: 5px;
   background-color: gainsboro;
   margin-bottom: 5px;
+  color: var(--color-text);
+  background-color: var(--bg-color);
 }
