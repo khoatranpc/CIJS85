@@ -1,0 +1,27 @@
+.main-layout {
+    display: flex;
+    gap: 8px;
+}
+
+.main-layout .list-tab {
+    flex: 0.3;
+    border-right: 1px solid black;
+}
+
+.main-layout .list-tab ul {
+    list-style: none;
+}
+
+.main-layout .list-tab ul li {
+    padding: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.main-layout .list-tab ul li:hover {
+    background-color: gainsboro;
+}
+
+.main-layout .main-content {
+    flex: 0.7;
+}
