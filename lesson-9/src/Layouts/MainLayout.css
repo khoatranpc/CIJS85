@@ -3,6 +3,10 @@
     gap: 8px;
 }
 
+.active li {
+    background-color: gainsboro;
+}
+
 .main-layout .list-tab {
     flex: 0.3;
     border-right: 1px solid black;
@@ -24,4 +28,10 @@
 
 .main-layout .main-content {
     flex: 0.7;
+}
+
+.form .row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
 }

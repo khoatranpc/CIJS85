@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import './MainLayout.css';
 
 const MainLayout = () => {
@@ -7,8 +7,12 @@ const MainLayout = () => {
         <div className='main-layout'>
             <div className="list-tab">
                 <ul>
-                    <Link to={'/over-view'}><li>Thông tin khách hàng</li></Link>
-                    <Link to={'/business-statistic'}><li>Thống kê kinh doanh</li></Link>
+                    <NavLink to={'/over-view'} className={(link) => {
+                        return link.isActive && 'active'
+                    }}><li>Thông tin khách hàng</li></NavLink>
+                    <NavLink to={'/business-statistic'} className={(link) => {
+                        return link.isActive && 'active'
+                    }}><li>Thống kê kinh doanh</li></NavLink>
                 </ul>
             </div>
             <div className="main-content">
