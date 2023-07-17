@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import StoreContext from '../../contexts/StoreContext';
 import { Button, Modal, Table } from 'antd';
 import { formatDateToString, formatNumber, uuid } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const TableCustomer = () => {
-    const [dataBills, setDataBills] = useState({
-        isLoading: false,
-        data: null
-    });
     const [modalAdd, setModalAdd] = useState(false);
+    const { overviewBills } = useContext(StoreContext);
     const columns = [
         {
             title: 'Tên khách hàng',
@@ -47,13 +45,8 @@ const TableCustomer = () => {
         },
     ]
     useEffect(() => {
-        if (!dataBills.data) {
-            axios.get(`https://64b15771062767bc4826100a.mockapi.io/api/v1/bills`).then((rs) => {
-                setDataBills({
-                    isLoading: false,
-                    data: rs.data
-                });
-            })
+        if (!overviewBills.data) {
+            overviewBills.handleData();
         }
     }, []);
     const nav = useNavigate();
@@ -82,9 +75,9 @@ const TableCustomer = () => {
                 }}
             >Thêm</Button>
             <Table
-                // loading={dataBills.loading}
+                loading={overviewBills.isLoading}
                 columns={columns}
-                dataSource={dataBills.data}
+                dataSource={overviewBills.data}
                 onRow={(data) => {
                     return {
                         onClick() {
